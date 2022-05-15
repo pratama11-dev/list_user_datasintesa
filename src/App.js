@@ -13,7 +13,7 @@ function App() {
         <Layout className="layout">
           <Header>
             <div className="logo">
-              <img src="../datasintesa_logo.png" alt="logo" width="10%" />
+              <img src="../datasintesa_logo.png" alt="logo" width="115px" />
             </div>
           </Header>
           <Content style={{ padding: '0 50px' }}>
