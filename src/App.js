@@ -1,24 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Layout, Breadcrumb } from 'antd';
+import HomeScreen from './screen/HomeScreen';
+
 
 function App() {
+  const { Header, Content, Footer } = Layout;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Layout className="layout">
+          <Header>
+            <div className="logo">
+              <img src="../datasintesa_logo.png" alt="logo" width="10%" />
+            </div>
+          </Header>
+          <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>List User</Breadcrumb.Item>
+            </Breadcrumb>
+            <main>
+              <Routes>
+                <Route path="/" element={<HomeScreen/>} exact />
+              </Routes>
+            </main>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2022 Created by Ant UED</Footer>
+        </Layout>
+      </div>
+    </BrowserRouter>
   );
 }
 
