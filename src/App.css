@@ -24,3 +24,7 @@
 .site-layout-content{
   background: none !important;
 }
+
+.ant-layout-footer{
+  background-color: #fff;
+}
