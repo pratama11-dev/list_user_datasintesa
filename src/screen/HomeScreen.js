@@ -7,9 +7,8 @@ import MessageBox from '../components/MessageBox';
 import ModalScreen from '../screen/ModalScreen';
 
 
-export default function HomeScreen(props) {
+export default function HomeScreen() {
   const [ posts, setPosts ] = useState();
-  const [ nat, setNat ] = useState();
 
   const PAGE_NUMBER = 1;
   const [page, setPage] = useState(PAGE_NUMBER);
@@ -86,15 +85,20 @@ export default function HomeScreen(props) {
     return age;
   };
 
-  // const handleButtonFilter = (e) => {
-  //   console.log(e.target.value);
-  // }
+  const handleButtonFilter = (e) => {
+    let filter = e.target.value;
+    let filteredPosts = posts.results.filter(post => {
+      return post.nat.toLowerCase().includes(filter.toLowerCase());
+    });
+    setPosts({results: filteredPosts});
+  }
+
 
   return (
     <div>
       <div className="d-flex justify-content-end align-items-center">
         <p className="mb-0 mr-3">Filter Nation By : </p>
-        <Button type="primary" value="gb">GB</Button>
+        <Button type="primary" value="GB" onClick={handleButtonFilter}>GB</Button>
       </div>
       <div className="site-layout-content d-flex flex-wrap justify-content-center">
         <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
