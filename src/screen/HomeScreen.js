@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import { Card, Avatar, Modal, Button } from 'antd';
+import { Card, Avatar, Modal, Select } from 'antd';
 import { MailOutlined, HomeOutlined, CalendarOutlined } from '@ant-design/icons';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -86,7 +86,20 @@ export default function HomeScreen() {
     return age;
   };
 
+  const { Option } = Select;
+
+
   const handleButtonFilter = (e) => {
+    // const filter = e.target.value;
+
+    // const filterPosts = posts.results.filter((post) => {
+    //   return post.nat.toLowerCase().includes(filter.toLowerCase());
+    // });
+
+    // setPosts({
+    //   results: filterPosts
+    // });
+
     let filter = e.target.value;
     let filteredPosts = posts.results.filter(post => {
       return post.nat.toLowerCase().includes(filter.toLowerCase());
@@ -94,12 +107,30 @@ export default function HomeScreen() {
     setPosts({results: filteredPosts});
   }
 
-
   return (
     <div>
       <div className="d-flex justify-content-end align-items-center">
         <p className="mb-0 mr-3">Filter Nation By : </p>
-        <Button type="primary" value="GB" onClick={handleButtonFilter}>GB</Button>
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Search to Select"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          filterSort={(optionA, optionB) =>
+            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+          }
+        >
+          <Option value="">ALl</Option>
+          {posts && posts.results.map((post, index) => {
+            return (
+              <Option value={post.nat} key={index} onClick={handleButtonFilter}>{post.nat}</Option>
+            )
+          })}
+        </Select>
+        {/* <Button type="primary" value="GB" onClick={handleButtonFilter}>GB</Button> */}
       </div>
       <div className="site-layout-content d-flex flex-wrap justify-content-center">
         <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
