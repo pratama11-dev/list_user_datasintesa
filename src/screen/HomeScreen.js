@@ -51,15 +51,6 @@ export default function HomeScreen(props) {
     setIsModalVisible(false);
   };
 
-  // useEffect(() => {
-  //   const fetchNat = async () => {
-  //     const {data} = await axios.get(`https://randomuser.me/api/?page=1&results=10&nat=gb`);
-  //     setNat(data);
-  //     console.log(data);
-  //   }
-  //   fetchNat();
-  // }, []);
-
   useEffect(()=> {
     const fetchData = async () => {
       try {
@@ -103,10 +94,10 @@ export default function HomeScreen(props) {
     <div>
       <div className="d-flex justify-content-end align-items-center">
         <p className="mb-0 mr-3">Filter Nation By : </p>
-        <Button type="primary" value="gb" onClick={props.handleButtonFilter}>GB</Button>
+        <Button type="primary" value="gb">GB</Button>
       </div>
       <div className="site-layout-content d-flex flex-wrap justify-content-center">
-        <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} handleButtonFilter={this.handleButtonFilter}>
+        <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
           <ModalScreen
             email={modaldata[0]}
             name={modaldata[1]}
