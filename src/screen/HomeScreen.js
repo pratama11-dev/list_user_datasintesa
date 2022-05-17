@@ -50,7 +50,7 @@ export default function HomeScreen() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get("https://randomuser.me/api/?page=1&results=10");
+        const { data } = await axios.get("https://randomuser.me/api/?page=1&results=50");
         setLoading(false);
         setPosts(data);
         // debugger
@@ -71,9 +71,9 @@ export default function HomeScreen() {
     }
     return age;
   };
-  
+
   return (
-    <div className="site-layout-content d-flex flex-wrap">
+    <div className="site-layout-content d-flex flex-wrap justify-content-center">
       <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <ModalScreen
           email={modaldata[0]}
