@@ -28,3 +28,12 @@
 .ant-layout-footer{
   background-color: #fff;
 }
+
+.ant-avatar.ant-avatar-circle.ant-avatar-image{
+  border: 2px solid rgb(26, 167, 236);
+}
+
+.ant-card-meta{
+  display: flex;
+  align-items: center;
+}

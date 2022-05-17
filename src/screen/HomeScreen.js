@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Card, Avatar, Modal, Button } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import { MailOutlined, HomeOutlined, CalendarOutlined } from '@ant-design/icons';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import ModalScreen from '../screen/ModalScreen';
@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modaldata, setModaldata] = useState([]);
 
-  const showModal = (email, name, last_name, phone, cell, street_number, street_name, city, state, country, postcode, nat) => {
+  const showModal = (email, name, last_name, phone, cell, street_number, street_name, city, state, country, postcode, nat, dob) => {
     let modalData = [
       email,
       name,
@@ -34,7 +34,8 @@ export default function HomeScreen() {
       state,
       country,
       postcode,
-      nat
+      nat,
+      dob
     ];
 
     setModaldata(modalData);
@@ -115,6 +116,7 @@ export default function HomeScreen() {
             country={modaldata[9]}
             postcode={modaldata[10]}
             nat={modaldata[11]}
+            dob={calculatedAge(modaldata[12])}
           />
         </Modal>
 
@@ -123,37 +125,55 @@ export default function HomeScreen() {
           error?<MessageBox>{error}</MessageBox>
           :<>
           {posts && posts.results.map((post, index) => (
-              <div key={index}>
-                <div className='d-flex align-self-stretch'>
-                  <Card
-                    style={{ width: 280, margin: '8px 8px' }}
-                    actions={[
-                      <EyeOutlined key="setting"
-                        onClick={()=>
-                          showModal(
-                            post.email,
-                            post.name.first,
-                            post.name.last,
-                            post.phone,
-                            post.cell,
-                            post.location.street.number,
-                            post.location.street.name,
-                            post.location.city,
-                            post.location.state,
-                            post.location.country,
-                            post.location.postcode,
-                            post.nat
-                          )}/>,
-                    ]}
+            <div className="d-flex" key={index}>
+              <div className='d-flex align-self-stretch'>
+                <Card
+                  style={{
+                    width: 280,
+                    margin: '5px 5px',
+                    borderRadius: "15px",
+                    overflow: "hidden"
+                  }}
+                  onClick={()=>
+                    showModal(
+                      post.email,
+                      post.name.first,
+                      post.name.last,
+                      post.phone,
+                      post.cell,
+                      post.location.street.number,
+                      post.location.street.name,
+                      post.location.city,
+                      post.location.state,
+                      post.location.country,
+                      post.location.postcode,
+                      post.nat,
+                      post.dob.date,
+                    )}
                   >
-                    <Meta
-                      avatar={<Avatar src={post.picture.thumbnail} />}
-                      title={[post.name.title + ". " + post.name.first + " " + post.name.last]}
-                      description={[post.email + "\n City : " + post.location.city + "\n Date Of Birthday : " + new Date(post.dob.date).toLocaleString() + " Age : " + calculatedAge(post.dob.date) + " Years Old"]}
-                    />
-                  </Card>
-                </div>
+                  <Meta
+                    avatar={<Avatar src={post.picture.thumbnail} size="large"/>}
+                    title={[post.name.title + ". " + post.name.first + " " + post.name.last]}
+                  />
+                  <div className="card_body mt-8 ml-2">
+                    <div className="d-flex flex-column flex-wrap text-break">
+                      <div className="d-flex align-items-center text-muted">
+                        <MailOutlined />
+                        <p className="mb-0 ml-3">{post.email}</p>
+                      </div>
+                      <div className="d-flex align-items-center text-muted">
+                        <HomeOutlined />
+                        <p className="mb-0 ml-3">{post.location.city}</p>
+                      </div>
+                      <div className="d-flex align-items-center text-muted">
+                        <CalendarOutlined />
+                        <p className="mb-0 ml-3">{new Date(post.dob.date).toLocaleString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               </div>
+            </div>
           ))}
         </>}
       </div>
