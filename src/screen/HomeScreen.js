@@ -61,6 +61,17 @@ export default function HomeScreen() {
       fetchData();
   },[]);
 
+  const calculatedAge = (birthday) => {
+    let today = new Date();
+    let birthDate = new Date(birthday);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age = age - 1;
+    }
+    return age;
+  };
+  
   return (
     <div className="site-layout-content d-flex flex-wrap">
       <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
@@ -111,7 +122,7 @@ export default function HomeScreen() {
                   <Meta
                     avatar={<Avatar src={post.picture.thumbnail} />}
                     title={[post.name.title + ". " + post.name.first + " " + post.name.last]}
-                    description={[post.email + "\n City : " + post.location.city + "\n Date Of Birthday : " + new Date(post.dob.date).toLocaleString()]}
+                    description={[post.email + "\n City : " + post.location.city + "\n Date Of Birthday : " + new Date(post.dob.date).toLocaleString() + " Age : " + calculatedAge(post.dob.date) + " Years Old"]}
                   />
                 </Card>
               </div>
