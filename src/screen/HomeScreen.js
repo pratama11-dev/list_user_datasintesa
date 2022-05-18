@@ -56,7 +56,7 @@ export default function HomeScreen() {
     const listPost = [];
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=15`);
+        const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=20`);
         data.results.forEach(element => {
           listPost.push(element);
         });
