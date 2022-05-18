@@ -9,6 +9,7 @@ import ModalScreen from '../screen/ModalScreen';
 
 export default function HomeScreen() {
   const [ posts, setPosts ] = useState([]);
+  const [ filteredPosts, setFilteredPosts ] = useState([]);
 
   const PAGE_NUMBER = 1;
   const [page, setPage] = useState(PAGE_NUMBER);
@@ -55,17 +56,14 @@ export default function HomeScreen() {
     const listPost = [];
     const fetchData = async () => {
       try {
-        // setLoading(true);
         const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=15`);
         data.results.forEach(element => {
           listPost.push(element);
         });
         setPosts((posts) => [...posts, ...listPost]);
-        // setLoading(false);
-
+        setFilteredPosts((posts) => [...posts, ...listPost]);
       } catch (error) {
         setError(error.message);
-        setLoading(false);
       }}
       fetchData();
   },[page]);
@@ -93,13 +91,22 @@ export default function HomeScreen() {
 
   const { Option } = Select;
 
-
-  const handleButtonFilter = (e) => {
-    let filter = e.target.value;
+  const changeFilter = (value) => {
     let filteredPosts = posts.filter(post => {
-      return post.nat.toLowerCase().includes(filter.toLowerCase());
+      return post.nat.toLowerCase().includes(value.toLowerCase());
     });
-    setPosts({results: filteredPosts});
+    setFilteredPosts(filteredPosts);
+  }
+
+  const unFilter = () => {
+    setFilteredPosts(posts);
+    console.log(posts);
+  }
+
+  const uniqArray = (arrArg) => {
+    return arrArg.filter((elem, pos, arr) => {
+      return arr.indexOf(elem) === pos;
+    });
   }
 
   return (
@@ -109,23 +116,18 @@ export default function HomeScreen() {
         <Select
           showSearch
           style={{ width: 200 }}
-          placeholder="Search to Select"
+          placeholder="Select a nation"
           optionFilterProp="children"
+          onChange={changeFilter}
           filterOption={(input, option) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
-          filterSort={(optionA, optionB) =>
-            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-          }
         >
-          <Option value="">ALl</Option>
-          {posts && posts.map((post, index) => {
-            return (
-              <Option value={post.nat} key={index} onClick={handleButtonFilter}>{post.nat}</Option>
-            )
-          })}
+          <Option value="" onClick={unFilter}>All</Option>
+          {uniqArray(posts.map(post => post.nat)).map(nat => (
+            <Option key={nat} value={nat}>{nat}</Option>
+          ))}
         </Select>
-        {/* <Button type="primary" value="GB" onClick={handleButtonFilter}>GB</Button> */}
       </div>
       <div className="site-layout-content d-flex flex-wrap justify-content-center">
         <Modal title="User Detail" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
@@ -150,7 +152,7 @@ export default function HomeScreen() {
           :
           error?<MessageBox>{error}</MessageBox>
           :<>
-          {posts && posts.map((post, index) => (
+          {filteredPosts.map((post, index) => (
             <div className="d-flex" key={index}>
               <div className='d-flex align-self-stretch'>
                 <Card
