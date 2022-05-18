@@ -8,7 +8,7 @@ import ModalScreen from '../screen/ModalScreen';
 
 
 export default function HomeScreen() {
-  const [ posts, setPosts ] = useState();
+  const [ posts, setPosts ] = useState([]);
 
   const PAGE_NUMBER = 1;
   const [page, setPage] = useState(PAGE_NUMBER);
@@ -52,12 +52,17 @@ export default function HomeScreen() {
   };
 
   useEffect(()=> {
+    const listPost = [];
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=20`);
-        setLoading(false);
-        setPosts(data);
+        // setLoading(true);
+        const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=15`);
+        data.results.forEach(element => {
+          listPost.push(element);
+        });
+        setPosts((posts) => [...posts, ...listPost]);
+        // setLoading(false);
+
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -90,18 +95,8 @@ export default function HomeScreen() {
 
 
   const handleButtonFilter = (e) => {
-    // const filter = e.target.value;
-
-    // const filterPosts = posts.results.filter((post) => {
-    //   return post.nat.toLowerCase().includes(filter.toLowerCase());
-    // });
-
-    // setPosts({
-    //   results: filterPosts
-    // });
-
     let filter = e.target.value;
-    let filteredPosts = posts.results.filter(post => {
+    let filteredPosts = posts.filter(post => {
       return post.nat.toLowerCase().includes(filter.toLowerCase());
     });
     setPosts({results: filteredPosts});
@@ -124,7 +119,7 @@ export default function HomeScreen() {
           }
         >
           <Option value="">ALl</Option>
-          {posts && posts.results.map((post, index) => {
+          {posts && posts.map((post, index) => {
             return (
               <Option value={post.nat} key={index} onClick={handleButtonFilter}>{post.nat}</Option>
             )
@@ -155,7 +150,7 @@ export default function HomeScreen() {
           :
           error?<MessageBox>{error}</MessageBox>
           :<>
-          {posts && posts.results.map((post, index) => (
+          {posts && posts.map((post, index) => (
             <div className="d-flex" key={index}>
               <div className='d-flex align-self-stretch'>
                 <Card
