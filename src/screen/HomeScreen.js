@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Card, Avatar, Modal, Select } from 'antd';
-import { MailOutlined, HomeOutlined, CalendarOutlined } from '@ant-design/icons';
+import { MailOutlined, HomeOutlined, CalendarOutlined, FlagOutlined } from '@ant-design/icons';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import ModalScreen from '../screen/ModalScreen';
@@ -10,6 +10,7 @@ import ModalScreen from '../screen/ModalScreen';
 export default function HomeScreen() {
   const [ posts, setPosts ] = useState([]);
   const [ filteredPosts, setFilteredPosts ] = useState([]);
+  const [ nats, setNats ] = useState([]);
 
   const PAGE_NUMBER = 1;
   const [page, setPage] = useState(PAGE_NUMBER);
@@ -54,6 +55,7 @@ export default function HomeScreen() {
 
   useEffect(()=> {
     const listPost = [];
+    setLoading(true);
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`https://randomuser.me/api/?page=${page}&results=20`);
@@ -65,6 +67,7 @@ export default function HomeScreen() {
       } catch (error) {
         setError(error.message);
       }}
+      setLoading(false);
       fetchData();
   },[page]);
 
@@ -100,7 +103,6 @@ export default function HomeScreen() {
 
   const unFilter = () => {
     setFilteredPosts(posts);
-    console.log(posts);
   }
 
   const uniqArray = (arrArg) => {
@@ -112,7 +114,7 @@ export default function HomeScreen() {
   return (
     <div>
       <div className="d-flex justify-content-end align-items-center">
-        <p className="mb-0 mr-3">Filter Nation By : </p>
+        <p className="mb-0 mr-3">Filter Nationality By : </p>
         <Select
           showSearch
           style={{ width: 200 }}
@@ -121,6 +123,9 @@ export default function HomeScreen() {
           onChange={changeFilter}
           filterOption={(input, option) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          filterSort={(optionA, optionB) =>
+            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
           }
         >
           <Option value="" onClick={unFilter}>All</Option>
@@ -192,6 +197,10 @@ export default function HomeScreen() {
                       <div className="d-flex align-items-center text-muted">
                         <HomeOutlined />
                         <p className="mb-0 ml-3">{post.location.city}</p>
+                      </div>
+                      <div className="d-flex align-items-center text-muted">
+                        <FlagOutlined />
+                        <p className="mb-0 ml-3">{post.nat}</p>
                       </div>
                       <div className="d-flex align-items-center text-muted">
                         <CalendarOutlined />
